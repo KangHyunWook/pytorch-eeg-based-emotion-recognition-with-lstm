@@ -96,7 +96,7 @@ def my_eval(mode=None, to_print=False):
 
             y_tilde = model(a)
 
-            criterion=nn.MSELoss(reduction='mean')
+            criterion=nn.CrossEntropyLoss(reduction='mean')
 
             cls_loss = criterion(y_tilde, y)
             loss = cls_loss
@@ -116,18 +116,6 @@ def my_eval(mode=None, to_print=False):
     accuracy =correct/(dev_batch_data.shape[0]*dev_batch_data.shape[1])
     print('accuracy: ', accuracy)
     return eval_loss, accuracy
-
-
-class MSE(nn.Module):
-    def __init__(self):
-        super(MSE, self).__init__()
-
-    def forward(self, pred, real):
-        diffs = torch.add(real, -pred)
-        n = torch.numel(diffs.data)
-        mse = torch.sum(diffs.pow(2)) / n
-
-        return mse
 
 
 def get_batch_data(data,labels,n):
@@ -161,7 +149,7 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         model.cuda()
     
-    criterion = nn.MSELoss(reduction="mean")
+    criterion = nn.CrossEntropyLoss(reduction="mean")
     
     best_valid_loss = float('inf')
 
